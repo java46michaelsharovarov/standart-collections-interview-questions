@@ -7,9 +7,9 @@ import java.util.*;
 
 class ListTests {
 
-	Integer[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	Integer[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 64, 32};
 	List<Integer> list = Arrays.asList(numbers);
-	List<Integer> listMutable;	
+	ArrayList<Integer> listMutable;	
 	
 	@BeforeEach
 	void setUp() {
@@ -58,5 +58,18 @@ class ListTests {
 		listMutable.remove(7);
 		assertTrue(listMutable.contains(7));
 	}
+	
+	@Test
+	void removeRepeatedTest() {
+		listMutable.addAll(Arrays.asList(numbers));
+		removeRepeated(listMutable);
+		assertArrayEquals(numbers, listMutable.toArray(Integer[]::new));
+	}
 
+	private void removeRepeated(List<Integer> list) {
+		LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>(list);
+		list.clear();
+		list.addAll(linkedHashSet);
+	}
+	
 }
