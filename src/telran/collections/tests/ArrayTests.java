@@ -2,12 +2,8 @@ package telran.collections.tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -33,20 +29,13 @@ class ArrayTests {
 	 * half of total sum of a given array
 	 */
 	private boolean isHalfSumTwoNumbers(int[] array) {
-		int halfSum = IntStream.of(array).sum() / 2;
-		ArrayList<Integer> arrayList = IntStream.of(array).boxed().sorted()
-				.collect(Collectors.toCollection(ArrayList<Integer>::new));
-		HashSet<Integer> hashSet = new HashSet<>(arrayList);
-		for(int i = 0; i < arrayList.size(); i++) {
-			if(arrayList.get(i) == halfSum / 2) {
-				if(i != arrayList.size() - 1) {
-					if(arrayList.get(i) == arrayList.get(i + 1)) {
-						return true;
-					}
-				}				
-			} else if(hashSet.contains(halfSum - arrayList.get(i))) {				
+		int halfSum = Arrays.stream(array).sum() / 2;
+		HashSet<Integer> helper = new HashSet<>();
+		for(Integer num : array) {
+			if(helper.contains(halfSum - num)) {
 				return true;
 			}
+			helper.add(num);
 		}
 		return false;
 	}
@@ -65,15 +54,16 @@ class ArrayTests {
 	 * if no value with its negative image the function returns -1
 	 */
 	private Integer valueWithMaxNegative(int[] array) {
-		List<Integer> list = Arrays.stream(array).boxed().collect(Collectors.toList());
-		list.sort((a,b) -> b - a);
-		HashSet<Integer> hashSet = new HashSet<>(list);
-		for(Integer el : list) {
-			if(hashSet.contains(-el)) {
-				return el;
+		HashSet<Integer> helper = new HashSet<>();
+		int res = -1;
+		for(int num : array) {
+			int absNum = Math.abs(num);
+			if(helper.contains(-num) && absNum > res) {
+				res = absNum;
 			}
-		}
-		return -1;
+			helper.add(num);
+		}	
+		return res;
 	}
 
 }

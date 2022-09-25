@@ -7,7 +7,7 @@ import java.util.*;
 
 class ListTests {
 
-	Integer[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 64, 32};
+	Integer[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	List<Integer> list = Arrays.asList(numbers);
 	ArrayList<Integer> listMutable;	
 	
@@ -67,9 +67,8 @@ class ListTests {
 	}
 
 	private void removeRepeated(List<Integer> list) {
-		LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>(list);
-		list.clear();
-		list.addAll(linkedHashSet);
+		HashSet<Integer> helper = new HashSet<>();
+		list.removeIf(e -> !helper.add(e));
 	}
 	
 }
