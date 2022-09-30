@@ -10,8 +10,8 @@ import java.util.HashMap;
  */
 public class MyArray<T> {
 	
-	HashMap<Integer, T> hashMap = new HashMap<>();
-	public int size;
+	HashMap<Integer, T> hashMap;
+	private int size;
 	private T valueToSetAll;
 	
 	public MyArray(int size) {
@@ -19,6 +19,7 @@ public class MyArray<T> {
 			throw new IllegalArgumentException();
 		}
 		this.size = size;
+		hashMap = new HashMap<>();
 	}
 	/**
 	 * sets all array's elements with a given value
@@ -26,17 +27,18 @@ public class MyArray<T> {
 	 */
 	public void setAll(T value) {
 		valueToSetAll = value;
+		hashMap = new HashMap<>();
 	}
 	/**
 	 * 
 	 * @param index
 	 * @return value at given index or null if index is wrong
 	 */
-	public T get(int index) {	
-		if(valueToSetAll != null) {
-			hashMap.put(index, valueToSetAll); 
+	public T get(int index) {
+		if (index < 0 || index >= size) {
+			return null;
 		}
-		return hashMap.get(index);
+		return hashMap.getOrDefault(index, valueToSetAll);
 	}
 	/**
 	 * sets a given value at a given index
@@ -49,6 +51,8 @@ public class MyArray<T> {
 			throw new IndexOutOfBoundsException();
 		}
 		hashMap.put(index, value);
-		valueToSetAll = null;
+	}
+	public int getSize() {
+		return size;
 	}
 }

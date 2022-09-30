@@ -42,9 +42,14 @@ class MyArrayTests {
 		array.set(INDEX_5, VALUE_1);
 		assertEquals(VALUE_2, array.get(INDEX_0));
 		assertEquals(VALUE_1, array.get(INDEX_5));
+		array.setAll(null);
+		checkAfterSetAll(null);
+		array.set(INDEX_0, VALUE_2);
+		assertEquals(VALUE_2, array.get(INDEX_0));
+		assertEquals(null, array.get(7));
 	}
 	private void checkAfterSetAll(Integer value) {
-		for(int i = 0; i < array.size; i++) {
+		for(int i = 0; i < array.getSize(); i++) {
 			assertEquals(value, array.get(i));
 		}
 	}
@@ -52,7 +57,7 @@ class MyArrayTests {
 	@Test
 	void testGet() {
 		assertNull(array.get(NEGATIVE_INDEX));
-		assertNull(array.get(array.size));
+		assertNull(array.get(array.getSize()));
 		array.set(INDEX_0, VALUE_2);
 		assertEquals(VALUE_2, array.get(INDEX_0));
 	}
@@ -60,9 +65,9 @@ class MyArrayTests {
 	@Test
 	void testSet() {
 		assertThrows(IndexOutOfBoundsException.class, ()-> array.set(NEGATIVE_INDEX, VALUE_3));
-		assertThrows(IndexOutOfBoundsException.class, ()-> array.set(array.size, VALUE_3));
-		array.set(array.size - 1, VALUE_3);
-		assertEquals(VALUE_3, array.get(array.size - 1));
+		assertThrows(IndexOutOfBoundsException.class, ()-> array.set(array.getSize(), VALUE_3));
+		array.set(array.getSize() - 1, VALUE_3);
+		assertEquals(VALUE_3, array.get(array.getSize() - 1));
 	}
 
 }
