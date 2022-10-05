@@ -19,10 +19,9 @@ public class Anagram {
 		String[] wordChars = word.toLowerCase().split("");
 		String[] anagramChars = anagram.toLowerCase().split("");
 		HashMap<String, Integer> helper = new HashMap<>(); 
-		Arrays.stream(wordChars).forEach(c -> helper.put(c, helper.getOrDefault(c, 0) + 1));
+		Arrays.stream(wordChars).forEach(c -> helper.merge(c, 1, Integer::sum));
 		for(String c : anagramChars) {
-			Integer res = helper.put(c, helper.getOrDefault(c, 0) - 1);
-			if(res == null || res == 0) {
+			if(helper.compute(c, (k, v) -> v == null ? -1 : --v) < 0) {
 				return false;
 			}
 		}
