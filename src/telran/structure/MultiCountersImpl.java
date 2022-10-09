@@ -1,25 +1,26 @@
 package telran.structure;
 
 import java.util.*;
+import java.util.Map.Entry;
 
 public class MultiCountersImpl implements MultiCounters {
 	
 	private HashMap<Object, Integer> items = new HashMap<>(); // key - item, value - counter
 	private TreeMap<Integer, HashSet<Object>> counters = new TreeMap<>(); // key counter, value - set of items having the key - counter
-	 
+	
 	@Override
 	public Integer addItem(Object item) {
 		Integer count = items.merge(item, 1, Integer::sum);
 		if(count > 1) {
 			removeFromSet(item, count - 1);			
 		} 
-		counters.computeIfAbsent(getValue(item), k -> new HashSet<Object>()).add(item);		
+		counters.computeIfAbsent(count, k -> new HashSet<>()).add(item);		
 		return count;
 	}
 
 	@Override
 	public Integer getValue(Object item) {
-		return items.get(item);
+		return items.get(item); 
 	}
 
 	@Override
@@ -34,10 +35,8 @@ public class MultiCountersImpl implements MultiCounters {
 
 	@Override
 	public Set<Object> getMaxItems() {
-		if(items.isEmpty()) {
-			throw new NoSuchElementException();
-		}
-		return counters.get(counters.lastKey());
+		Entry<Integer, HashSet<Object>> maxCounter = counters.lastEntry() ;
+		return maxCounter != null ? maxCounter.getValue() : Collections.emptySet();
 	}
 
 	private void removeFromSet(Object item, Integer value) {

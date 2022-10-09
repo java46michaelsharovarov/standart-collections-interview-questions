@@ -3,7 +3,7 @@ package telran.structure.tests;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Arrays;
-import java.util.NoSuchElementException;
+import java.util.Collections;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -12,13 +12,14 @@ import org.junit.jupiter.api.Test;
 import telran.structure.MultiCounters;
 import telran.structure.MultiCountersImpl;
 
-class MultiCountersTests {
+abstract class MultiCountersTests {
 	
 	MultiCounters multiCounters;
+	abstract MultiCounters creatMultiCounters();
 	
 	@BeforeEach
 	void setUp() {
-		multiCounters = new MultiCountersImpl();
+		multiCounters = creatMultiCounters();
 		Object[] array = {null, "A", "B", "B", "C", "C", "D", "D", "D", "E", "E", "E", "F", "F", "F", "F"};
 		Arrays.stream(array).forEach(multiCounters::addItem);
 	}
@@ -52,12 +53,18 @@ class MultiCountersTests {
 
 	@Test
 	void testGetMaxItems() {
-		Set<Object> setOfMaxIetems = Set.of("F");
-		assertEquals(setOfMaxIetems, multiCounters.getMaxItems());
+		Set<Object> setOfMaxItems = Set.of("F");
+		areSetsEqual(setOfMaxItems, multiCounters.getMaxItems());
 		multiCounters.remove("F");
-		setOfMaxIetems = Set.of("D", "E");
-		assertEquals(setOfMaxIetems, multiCounters.getMaxItems());
+		setOfMaxItems = Set.of("D", "E");
+		areSetsEqual(setOfMaxItems, multiCounters.getMaxItems());
 		multiCounters = new MultiCountersImpl();
-		assertThrows(NoSuchElementException.class, () -> multiCounters.getMaxItems());
+		areSetsEqual(Collections.emptySet(), multiCounters.getMaxItems());
+	}
+	private void areSetsEqual(Set<Object> setOfMaxItems, Set<Object> maxItems) {
+		assertEquals(setOfMaxItems.size(), maxItems.size());
+		for(Object item: setOfMaxItems) {
+			assertTrue(maxItems.contains(item));
+		}		
 	}
 }
